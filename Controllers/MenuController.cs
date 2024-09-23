@@ -4,8 +4,18 @@ namespace RestaurantMVC.Controllers
 {
 	public class MenuController : Controller
 	{
-		public IActionResult Index()
+		private readonly string baseUrl = "localhost"; //Lägg till här
+		private readonly HttpClient _client;
+
+        public MenuController()
+        {
+            _client = new HttpClient();
+        }
+
+        public IActionResult Index()
 		{
+			
+
 			return View();
 		}
 	}
