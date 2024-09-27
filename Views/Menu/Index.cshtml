@@ -1,1 +1,19 @@
-﻿
+﻿@model List<DishViewModel>
+
+<section id="Menu">
+	<div class="container-fluid">
+		<h2 class="mx-auto" style="width: 500px">Welcome to the menu of the week</h2>
+		<ul>
+			@foreach(var dish in Model)
+			{
+				<div class="item">
+					<div class="item-title my-4">
+						<h2>@dish.dishName</h2>
+						<div class="border-bottom"></div>
+						<span>@dish.priceInSek Sek</span>
+					</div>
+				</div>
+			}
+		</ul>
+	</div>
+</section>
