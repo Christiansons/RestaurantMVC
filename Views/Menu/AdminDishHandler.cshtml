@@ -1,0 +1,13 @@
+﻿@model List<DishViewModel>
+
+@foreach(var dish in Model)
+{
+	<div class="card border border-dark rounded"> 
+		<div class="card-body">
+			<h3 class="card-title">@dish.dishName</h3>
+			<h3 class="card-title">@dish.priceInSek sek</h3>
+			<a class="card-title" asp-controller="menu" asp-action="UpdateDish" asp-route-id="@dish.id">Edit dish</a>
+			<a class="card-title" asp-controller="menu" asp-action="DeleteDish" asp-route-id="@dish.id">Delete dish</a>
+		</div>
+	</div>
+}

@@ -1,0 +1,21 @@
+﻿@model DishViewModel
+
+<h3>Edit dish</h3>
+
+<form method="post" asp-action="UpdateDish" asp-controller="Menu">
+	<div class="form-group">
+		<label asp-for=dishName>Dish name:</label>
+		<input asp-for="dishName" class="form-control" />
+
+		<label asp-for=priceInSek>Release year:</label>
+		<input asp-for="priceInSek" class="form-control" />
+
+		<label asp-for="isAvailable" class="control-label">Is available: </label>
+		<input asp-for="isAvailable" type="checkbox" />
+		<span asp-validation-for="isAvailable" class="text-danger"></span>
+	</div>
+
+	<input type="hidden" asp-for="id" />
+
+	<button type="submit" class="btn btn-control">Submit</button>
+</form>
