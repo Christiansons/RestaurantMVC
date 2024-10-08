@@ -1,13 +1,21 @@
 ﻿@model List<DishViewModel>
 
+
+<h3>
+	<a asp-action="addDish" asp-controller="menu">Add new dish</a>
+</h3>
 @foreach(var dish in Model)
 {
-	<div class="card border border-dark rounded"> 
-		<div class="card-body">
+	<div class="m-1 card border border-dark rounded"> 
+		<div class="m-1 card-body">
 			<h3 class="card-title">@dish.dishName</h3>
 			<h3 class="card-title">@dish.priceInSek sek</h3>
-			<a class="card-title" asp-controller="menu" asp-action="UpdateDish" asp-route-id="@dish.id">Edit dish</a>
-			<a class="card-title" asp-controller="menu" asp-action="DeleteDish" asp-route-id="@dish.id">Delete dish</a>
+			<a class="card-title" asp-controller="menu" asp-action="UpdateDish" asp-route-id="@dish.id"><button>edit</button></a>
+			<form asp-action="DeleteDish" asp-controller="menu" asp-route-id="@dish.id method="post">
+				<input type="hidden" name="id" value="@dish.id" />
+				<button type="submit">delete</button>
+			</form>
+			
 		</div>
 	</div>
 }
