@@ -27,7 +27,7 @@ namespace RestaurantMVC.Controllers
 			return View(availableMenu);
 		}
 
-		public async Task<IActionResult> AdminDishHandler()
+		public async Task<IActionResult> AdminDishHandler(string? error)
 		{
             var response = await _client.GetAsync(baseUrl);
             var json = await response.Content.ReadAsStringAsync();
@@ -81,6 +81,27 @@ namespace RestaurantMVC.Controllers
 			}
 
 			return RedirectToAction("AdminDishHandler");
+		}
+
+
+		public IActionResult AddDish()
+		{
+			return View();
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> AddDish(DishViewModel dish)
+		{
+			if(!ModelState.IsValid)
+			{
+				return RedirectToAction("AdminDishHandler"); //Error
+			}
+
+			var json = JsonConvert.SerializeObject(dish);
+			var content = new StringContent(json, Encoding.UTF8 , "application/json");
+			await _client.PostAsync($"{baseUrl}/createdish", content);
+
+			return RedirectToAction("AdminDishHandler"); //Created!
 		}
 	}
 }
