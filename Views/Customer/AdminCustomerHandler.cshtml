@@ -1,0 +1,48 @@
+﻿@model List<CustomerVM>
+
+<h3>
+	<a asp-action="addDish" asp-controller="menu">Add new customer</a>
+</h3>
+@foreach (var customer in Model)
+{
+	<div class="m-1 card border border-dark rounded">
+		<div class="card card-body">
+			<h3 class="card-title">@customer.name</h3>
+			<h3 class="card-title">@customer.phoneNr</h3>
+			<div><a class="card-title btn btn-primary" asp-controller="menu" asp-action="UpdateCustomer" asp-route-id="@customer.id">Edit customer</a></div>
+			<form asp-action="DeleteDish" asp-controller="menu" asp-route-id="@customer.id method="post">
+				<input type="hidden" name="id" value="@customer.id" />
+				<button class="btn btn-danger" type="submit">delete</button>
+			</form>
+			<div class="container mt-5">
+				<button class="btn btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#moreInfo" aria-expanded="false" aria-controls="moreInfo">
+					reservations
+				</button>
+
+				<!-- Collapsed -->
+				<div class="collapse mt-2" id="moreInfo">
+					@foreach(var reservation in customer.reservationDTOs)
+					{
+						<div class="card card-body">
+							<h4>Reservation number: @reservation.reservationNumber</h4>
+							<h4>Customer name: @reservation.customerName</h4>
+							<h4>Customer phone: @reservation.phoneNr</h4>
+							<h4>Table number: @reservation.tableNr</h4>
+							<h4>Party size: @reservation.partySize</h4>
+							<h4>Time from: @reservation.timeFrom</h4>
+							<h4>Time to: @reservation.timeTo</h4>
+
+							<div><a class="btn btn-primary" asp-controller="Reservation" asp-action="editReservation">Edit reservation</a></div>
+							<form asp-action="DeleteCustomerReservation" asp-controller="R	eservation" asp-route-id=reservationNumber method="post">
+								<input type="hidden" name="reservationNumber" value="@reservation.reservationNumber" />
+								<button class="btn btn-danger" type="submit">delete</button>
+							</form>
+						</div>
+						
+						
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+}
