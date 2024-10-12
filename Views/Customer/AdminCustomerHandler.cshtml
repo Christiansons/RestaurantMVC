@@ -1,7 +1,7 @@
 ﻿@model List<CustomerVM>
 
 <h3>
-	<a asp-action="addDish" asp-controller="menu">Add new customer</a>
+	<a class="btn btn-primary" asp-action="addCustomer" asp-controller="customer">Add new customer</a>
 </h3>
 @foreach (var customer in Model)
 {
@@ -9,8 +9,8 @@
 		<div class="card card-body">
 			<h3 class="card-title">@customer.name</h3>
 			<h3 class="card-title">@customer.phoneNr</h3>
-			<div><a class="card-title btn btn-primary" asp-controller="menu" asp-action="UpdateCustomer" asp-route-id="@customer.id">Edit customer</a></div>
-			<form asp-action="DeleteDish" asp-controller="menu" asp-route-id="@customer.id method="post">
+			<div><a class="card-title btn btn-primary" asp-controller="customer" asp-action="EditCustomer" asp-route-id="@customer.id">Edit customer</a></div>
+			<form asp-action="DeleteCustomer" asp-controller="customer" asp-route-id="@customer.id method="post">
 				<input type="hidden" name="id" value="@customer.id" />
 				<button class="btn btn-danger" type="submit">delete</button>
 			</form>
@@ -33,7 +33,7 @@
 							<h4>Time to: @reservation.timeTo</h4>
 
 							<div><a class="btn btn-primary" asp-controller="Reservation" asp-action="editReservation">Edit reservation</a></div>
-							<form asp-action="DeleteCustomerReservation" asp-controller="R	eservation" asp-route-id=reservationNumber method="post">
+							<form asp-action="DeleteCustomerReservation" asp-controller="Reservation" asp-route-id=reservationNumber method="post">
 								<input type="hidden" name="reservationNumber" value="@reservation.reservationNumber" />
 								<button class="btn btn-danger" type="submit">delete</button>
 							</form>

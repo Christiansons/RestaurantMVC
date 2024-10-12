@@ -1,5 +1,15 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model CustomerVM
+
+<h3>Add Customer</h3>
+
+<form method="post" asp-action="AddCustomer" asp-controller="customer">
+	<div class="form-group">
+		<label asp-for="name">Customer name:</label>
+		<input asp-for="name" class="form-control" />
+
+		<label asp-for=phoneNr>Phone nr:</label>
+		<input asp-for="phoneNr" class="form-control" />
+	</div>
+
+	<button type="submit" class="btn btn-primary mt-2">Create</button>
+</form>

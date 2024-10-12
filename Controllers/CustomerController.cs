@@ -33,32 +33,32 @@ namespace RestaurantMVC.Controllers
 			return View(customers);
 		}
 
-		public async Task<IActionResult> UpdateDish(int id)
+		public async Task<IActionResult> EditCustomer(int id)
 		{
 			var response = await _client.GetAsync($"{baseUrl}/{id}");
 			var json = await response.Content.ReadAsStringAsync();
-			var dish = JsonConvert.DeserializeObject<DishViewModel>(json);
+			var dish = JsonConvert.DeserializeObject<CustomerVM>(json);
 			return View(dish);
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> UpdateDish(DishViewModel dish)
+		public async Task<IActionResult> EditCustomer(CustomerVM customer)
 		{
 			if (!ModelState.IsValid)
 			{
-				return View(dish);
+				return View(customer);
 			}
 
-			var json = JsonConvert.SerializeObject(dish);
+			var json = JsonConvert.SerializeObject(customer);
 			var content = new StringContent(json, Encoding.UTF8, "application/json");
-			var response = await _client.PutAsync($"{baseUrl}/update/{dish.id}", content);
+			var response = await _client.PutAsync($"{baseUrl}/update/{customer.id}", content);
 
 			if (!response.IsSuccessStatusCode)
 			{
-				return View(dish);
+				return View(customer);
 			}
 
-			return RedirectToAction("AdminDishHandler");
+			return RedirectToAction("AdminCustomerHandler");
 		}
 
 
@@ -76,24 +76,24 @@ namespace RestaurantMVC.Controllers
 		}
 
 
-		public IActionResult AddDish()
+		public IActionResult AddCustomer()
 		{
 			return View();
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> AddDish(DishViewModel dish)
+		public async Task<IActionResult> AddCustomer(CustomerVM customer)
 		{
 			if (!ModelState.IsValid)
 			{
 				return RedirectToAction("AdminDishHandler"); //Error
 			}
 
-			var json = JsonConvert.SerializeObject(dish);
+			var json = JsonConvert.SerializeObject(customer);
 			var content = new StringContent(json, Encoding.UTF8, "application/json");
-			await _client.PostAsync($"{baseUrl}/createdish", content);
+			await _client.PostAsync($"{baseUrl}/createCustomer", content);
 
-			return RedirectToAction("AdminDishHandler"); //Created!
+			return RedirectToAction("AdminCustomerHandler"); //Created!
 		}
 	}
 }
