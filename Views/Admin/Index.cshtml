@@ -3,11 +3,17 @@
 
 <h3>Admin menu</h3>
 
-<ul>
+<ul class="list-group">
     <li>
-        <a asp-controller="menu" asp-action="AdminDishHandler">Handle menu</a>
+        <a class="btn btn-primary mt-1" asp-controller="menu" asp-action="AdminDishHandler">Handle menu</a>
     </li>
     <li>
-        <a asp-controller="customer" asp-action="AdminCustomerHandler">Handle customers</a>
+        <a class="btn btn-primary mt-1" asp-controller="customer" asp-action="AdminCustomerHandler">Handle customers</a>
+    </li>
+    <li>
+        <a class="btn btn-primary mt-1" asp-controller="Table" asp-action="AdminTableHandler">Handle Tables</a>
+    </li>
+    <li>
+        <a class="btn btn-primary mt-1" asp-controller="Reservation" asp-action="AdminReservationHandler">Handle reservations</a>
     </li>
 </ul>
