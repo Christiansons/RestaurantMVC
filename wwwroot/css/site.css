@@ -20,3 +20,11 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.body-bg-color {
+    background-color: #fb9b14;
+}
+
+.link-remove-swag {
+    text-decoration: none;
+}
