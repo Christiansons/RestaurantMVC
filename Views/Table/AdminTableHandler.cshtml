@@ -1,5 +1,20 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@model List<TableVM>
+
+<h3>
+	<a class="btn btn-primary" asp-action="addtable" asp-controller="table">Add new table</a>
+</h3>
+
+@foreach (var table in Model)
+{
+	<div class="m-1 card border border-dark rounded">
+		<div class="card card-body">
+			<h3 class="card-title">Table number: @table.tableNr</h3>
+			<h3 class="card-title">Table seats: @table.seats</h3>
+			<div><a class="card-title btn btn-primary" asp-controller="table" asp-action="EditTable" asp-route-id="@table.tableNr">Edit table</a></div>
+			<form asp-action="DeleteTable" asp-controller="menu" asp-route-id="@table.tableNr method="post">
+				<input type="hidden" name="id" value="@table.tableNr" />
+				<button class="btn btn-danger" type="submit">delete</button>
+			</form>
+		</div>
+	</div>
 }
