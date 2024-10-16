@@ -18,6 +18,14 @@ namespace RestaurantMVC.Controllers
             return View();
         }
 
+		public async Task<IActionResult> AdminReservationHandler()
+		{
+			var response = await _client.GetAsync(baseUrl);
+			var json = await response.Content.ReadAsStringAsync();
+			var reservations = JsonConvert.DeserializeObject<List<reservationVM>>(json);
+
+			return View(reservations);
+		}
 
         public async Task<IActionResult> EditReservation(int reservationId)
         {

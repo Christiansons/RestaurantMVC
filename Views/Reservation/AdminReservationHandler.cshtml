@@ -1,5 +1,24 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@model List<reservationVM>
+
+<h3>
+	<a class="btn btn-primary" asp-action="addreservation" asp-controller="reservation">Add new reservation</a>
+</h3>
+@foreach (var reservation in Model)
+{
+	<div class="m-1 card border border-dark rounded">
+		<div class="card card-body">
+			<h4>Reservation number: @reservation.reservationNumber</h4>
+			<h4>Customer name: @reservation.customerName</h4>
+			<h4>Customer phone: @reservation.phoneNr</h4>
+			<h4>Table number: @reservation.tableNr</h4>
+			<h4>Party size: @reservation.partySize</h4>
+			<h4>Time from: @reservation.timeFrom</h4>
+			<h4>Time to: @reservation.timeTo</h4>
+			<div><a class="card-title btn btn-primary" asp-controller="reservation" asp-action="EditReservation" asp-route-id="@reservation.reservationNumber">Edit reservation</a></div>
+			<form asp-action="Deletereservation" asp-controller="reservation" asp-route-id="@reservation.reservationNumber method="post">
+				<input type="hidden" name="id" value="@reservation.reservationNumber" />
+				<button class="btn btn-danger" type="submit">delete</button>
+			</form>
+		</div>
+	</div>
 }
