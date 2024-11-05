@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using RestaurantMVC.Models;
+using System.Text;
 
 namespace RestaurantMVC.Controllers
 {
@@ -36,9 +37,23 @@ namespace RestaurantMVC.Controllers
         }
 
 		[HttpPost]
-		public async Task<IActionResult> EditReservation()
+		public async Task<IActionResult> EditReservation(reservationVM reservationToEdit)
 		{
-			return View();
+			if(!ModelState.IsValid)
+			{
+				return View();
+			}
+
+			var json = JsonConvert.SerializeObject(reservationToEdit);
+			var content = new StringContent(json, Encoding.UTF8, "application/json");
+			var response = await _client.PatchAsync($"{baseUrl}/{reservationToEdit.reservationNumber}", content);
+
+			if (!response.IsSuccessStatusCode)
+			{
+				return View();
+			}
+
+			return RedirectToAction("AdminReservationHandler");
 		}
 
 		[HttpPost]
