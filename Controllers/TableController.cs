@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using RestaurantMVC.Models;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace RestaurantMVC.Controllers
@@ -19,9 +21,12 @@ namespace RestaurantMVC.Controllers
 			return View();
 		}
 
+		[Authorize]
 		public async Task<IActionResult> AdminTableHandler(string? error)
 		{
-			var response = await _client.GetAsync(baseUrl);
+            var token = HttpContext.Request.Cookies["jwtToken"];
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var response = await _client.GetAsync(baseUrl);
 			var json = await response.Content.ReadAsStringAsync();
 			var tables = JsonConvert.DeserializeObject<List<TableVM>>(json);
 
@@ -33,18 +38,24 @@ namespace RestaurantMVC.Controllers
 			return View(tables);
 		}
 
+		[Authorize]
 		public async Task<IActionResult> EditTable(int tableNr)
 		{
-			var response = await _client.GetAsync($"{baseUrl}/{tableNr}");
+            var token = HttpContext.Request.Cookies["jwtToken"];
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var response = await _client.GetAsync($"{baseUrl}/{tableNr}");
 			var json = await response.Content.ReadAsStringAsync();
 			var table = JsonConvert.DeserializeObject<TableVM>(json);
 			return View(table);
 		}
 
+		[Authorize]
 		[HttpPost]
 		public async Task<IActionResult> EditTable(TableVM table)
 		{
-			if (!ModelState.IsValid)
+            var token = HttpContext.Request.Cookies["jwtToken"];
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            if (!ModelState.IsValid)
 			{
 				return View(table);
 			}
@@ -61,11 +72,13 @@ namespace RestaurantMVC.Controllers
 			return RedirectToAction("AdminDishHandler");
 		}
 
-
+		[Authorize]
 		[HttpPost]
 		public async Task<IActionResult> DeleteTable(int tableNr)
 		{
-			var response = await _client.DeleteAsync($"{baseUrl}/delete/{tableNr}");
+            var token = HttpContext.Request.Cookies["jwtToken"];
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var response = await _client.DeleteAsync($"{baseUrl}/delete/{tableNr}");
 
 			if (!response.IsSuccessStatusCode)
 			{
@@ -76,15 +89,20 @@ namespace RestaurantMVC.Controllers
 		}
 
 
+		[Authorize]
 		public IActionResult AddTable()
 		{
+
 			return View();
 		}
 
+		[Authorize]
 		[HttpPost]
 		public async Task<IActionResult> AddTable(TableVM table)
 		{
-			if (!ModelState.IsValid)
+            var token = HttpContext.Request.Cookies["jwtToken"];
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            if (!ModelState.IsValid)
 			{
 				return RedirectToAction("AdminDishHandler"); //Error
 			}

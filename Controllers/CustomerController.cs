@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using RestaurantMVC.Models;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace RestaurantMVC.Controllers
@@ -19,8 +21,13 @@ namespace RestaurantMVC.Controllers
             return View();
         }
 
+		[Authorize]
 		public async Task<IActionResult> AdminCustomerHandler(string? error)
 		{
+			//Add jwt-token to header
+			var token = HttpContext.Request.Cookies["jwtToken"];
+			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
 			var response = await _client.GetAsync(baseUrl);
 			var json = await response.Content.ReadAsStringAsync();
 			var customers = JsonConvert.DeserializeObject<List<CustomerVM>>(json);
@@ -29,22 +36,30 @@ namespace RestaurantMVC.Controllers
 			{
 				return RedirectToAction("Error", "HomeController");
 			}
-
+			
 			return View(customers);
 		}
 
+		[Authorize]
 		public async Task<IActionResult> EditCustomer(int id)
 		{
-			var response = await _client.GetAsync($"{baseUrl}/{id}");
+            var token = HttpContext.Request.Cookies["jwtToken"];
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var response = await _client.GetAsync($"{baseUrl}/{id}");
 			var json = await response.Content.ReadAsStringAsync();
 			var dish = JsonConvert.DeserializeObject<CustomerVM>(json);
 			return View(dish);
 		}
 
+		[Authorize]
 		[HttpPost]
 		public async Task<IActionResult> EditCustomer(CustomerVM customer)
 		{
-			if (!ModelState.IsValid)
+            var token = HttpContext.Request.Cookies["jwtToken"];
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            if (!ModelState.IsValid)
 			{
 				return View(customer);
 			}
@@ -61,11 +76,13 @@ namespace RestaurantMVC.Controllers
 			return RedirectToAction("AdminCustomerHandler");
 		}
 
-
+		[Authorize]
 		[HttpPost]
 		public async Task<IActionResult> DeleteCustomer(int id)
 		{
-			var response = await _client.DeleteAsync($"{baseUrl}/delete/{id}");
+            var token = HttpContext.Request.Cookies["jwtToken"];
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var response = await _client.DeleteAsync($"{baseUrl}/delete/{id}");
 
 			if (!response.IsSuccessStatusCode)
 			{
@@ -75,18 +92,21 @@ namespace RestaurantMVC.Controllers
 			return RedirectToAction("AdminDishHandler");
 		}
 
-
+		[Authorize]
 		public IActionResult AddCustomer()
 		{
 			return View();
 		}
 
+		[Authorize]
 		[HttpPost]
 		public async Task<IActionResult> AddCustomer(CustomerVM customer)
 		{
-			if (!ModelState.IsValid)
+            var token = HttpContext.Request.Cookies["jwtToken"];
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            if (!ModelState.IsValid)
 			{
-				return RedirectToAction("AdminDishHandler"); //Error
+				return RedirectToAction("AdminCustomerHandler"); //Error
 			}
 
 			var json = JsonConvert.SerializeObject(customer);

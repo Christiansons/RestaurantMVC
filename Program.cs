@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 namespace RestaurantMVC
 {
 	public class Program
@@ -7,6 +9,20 @@ namespace RestaurantMVC
 			var builder = WebApplication.CreateBuilder(args);
 
 			// Add services to the container.
+			builder.Services.AddSession(options =>
+			{
+				options.Cookie.HttpOnly = true;
+				options.Cookie.IsEssential = true;
+			});
+
+			builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+				.AddCookie(options =>
+				{
+					options.LoginPath = "/Admin/AdminLogin";
+				});
+
+			builder.Services.AddAuthorization();
+
 			builder.Services.AddControllersWithViews();
 
 			var app = builder.Build();
@@ -24,6 +40,7 @@ namespace RestaurantMVC
 
 			app.UseRouting();
 
+			app.UseAuthentication();
 			app.UseAuthorization();
 
 			app.MapControllerRoute(

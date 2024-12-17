@@ -1,7 +1,16 @@
 ﻿@model DishViewModel
 
 
-<h3>Admin menu</h3>
+<div class="container-fluid">
+    <h3>Admin menu</h3>
+
+    <form method="post" asp-controller="admin" asp-action="adminlogout">
+        <button class="btn btn-danger">
+            Logout
+        </button>
+    </form>
+</div>
+
 
 <ul class="list-group">
     <li>

@@ -1,4 +1,4 @@
-﻿namespace RestaurantMVC.Models
+﻿namespace RestaurantMVC.Models.Auth
 {
     public class AdminLogin
     {

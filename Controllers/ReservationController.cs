@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using RestaurantMVC.Models;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace RestaurantMVC.Controllers
@@ -19,27 +21,36 @@ namespace RestaurantMVC.Controllers
             return View();
         }
 
+		[Authorize]
 		public async Task<IActionResult> AdminReservationHandler()
 		{
-			var response = await _client.GetAsync(baseUrl);
+            var token = HttpContext.Request.Cookies["jwtToken"];
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var response = await _client.GetAsync(baseUrl);
 			var json = await response.Content.ReadAsStringAsync();
 			var reservations = JsonConvert.DeserializeObject<List<reservationVM>>(json);
 
 			return View(reservations);
 		}
 
+		[Authorize]
         public async Task<IActionResult> EditReservation(int reservationId)
         {
+            var token = HttpContext.Request.Cookies["jwtToken"];
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await _client.GetAsync($"{baseUrl}/{reservationId}");
             var content = await response.Content.ReadAsStringAsync();
             var reservation = JsonConvert.DeserializeObject<reservationVM>(content);
             return View();
         }
 
+		[Authorize]
 		[HttpPost]
 		public async Task<IActionResult> EditReservation(reservationVM reservationToEdit)
 		{
-			if(!ModelState.IsValid)
+            var token = HttpContext.Request.Cookies["jwtToken"];
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            if (!ModelState.IsValid)
 			{
 				return View();
 			}
@@ -56,10 +67,13 @@ namespace RestaurantMVC.Controllers
 			return RedirectToAction("AdminReservationHandler");
 		}
 
+		[Authorize]
 		[HttpPost]
 		public async Task<IActionResult> DeleteReservation(int reservationNumber)
 		{
-			var response = await _client.DeleteAsync($"{baseUrl}/delete/{reservationNumber}");
+            var token = HttpContext.Request.Cookies["jwtToken"];
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var response = await _client.DeleteAsync($"{baseUrl}/delete/{reservationNumber}");
 
 			if (!response.IsSuccessStatusCode)
 			{
@@ -69,10 +83,13 @@ namespace RestaurantMVC.Controllers
 			return RedirectToAction("AdminReservationHandler");
 		}
 
+		[Authorize]
 		[HttpPost]
         public async Task<IActionResult> DeleteCustomerReservation(int reservationNumber)
         {
-			var response = await _client.DeleteAsync($"{baseUrl}/delete/{reservationNumber}");
+            var token = HttpContext.Request.Cookies["jwtToken"];
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var response = await _client.DeleteAsync($"{baseUrl}/delete/{reservationNumber}");
 			
 			if (!response.IsSuccessStatusCode)
 			{
