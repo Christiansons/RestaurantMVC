@@ -20,6 +20,7 @@ namespace RestaurantMVC.Controllers
 
         public async Task<IActionResult> Index()
 		{
+
             var response = await _client.GetAsync(baseUrl);
             var json = await response.Content.ReadAsStringAsync();
             var menu = JsonConvert.DeserializeObject<List<DishViewModel>>(json);
